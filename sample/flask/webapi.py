@@ -36,7 +36,7 @@ import time
 import threading
 import werkzeug
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath("__file__"))))
 sys.path.insert(0, BASE_DIR)
 
 from flask import Flask, send_file, request, abort, g, jsonify
@@ -47,6 +47,28 @@ from selenium.common.exceptions import WebDriverException
 from werkzeug.utils import secure_filename
 from webwhatsapi import MessageGroup, WhatsAPIDriver, WhatsAPIDriverStatus
 from webwhatsapi.objects.whatsapp_object import WhatsappObject
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+
+import chromedriver_binary 
+#from .objects.chat import UserChat, factory_chat
+#from .objects.contact import Contact
+#from .objects.message import MessageGroup, factory_message
+#from .objects.number_status import NumberStatus
+#from .wapi_js_wrapper import WapiJsWrapper
+
+
+
+
+
 
 """
 ###########################
@@ -201,15 +223,18 @@ def init_driver(client_id):
     ]
     if CHROME_IS_HEADLESS:
         chrome_options.append("--headless")
+	#chrome_options.append("--no-sandbox")
+	#chrome_options.append("--disable-dev-shm-usage")
     if CHROME_DISABLE_GPU:
         chrome_options.append("--disable-gpu")
+        chrome_options.append("--no-sandbox")
 
     # Create a whatsapidriver object
     d = WhatsAPIDriver(
         username=client_id,
         profile=profile_path,
         client="chrome",
-        chrome_options=chrome_options,
+        chrome_options=chrome_options
     )
     return d
 
@@ -710,4 +735,4 @@ def hello():
 
 if __name__ == "__main__":
     # todo: load presaved active client ids
-    app.run()
+    app.run(host='0.0.0.0',port=8080)
