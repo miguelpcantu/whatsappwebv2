@@ -644,7 +644,7 @@ def send_message(chat_id):
     if res:
         return jsonify(res)
     else:
-        return False
+        return jsonify(res)
 
 
 @app.route("/messages/<msg_id>/download", methods=["GET"])
